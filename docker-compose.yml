@@ -9,9 +9,9 @@ services:
     volumes_from:
       - www
     volumes:
-      - /docker-mount/nginx/logs:/var/log/nginx
-      - /docker-mount/nginx/conf:/etc/nginx/conf.d
-      - /docker-mount/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /docker/dd/nginx/logs:/var/log/nginx
+      - /docker/dd/nginx/conf:/etc/nginx/conf.d
+      - /docker/dd/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - php-fpm
       - node
@@ -25,7 +25,7 @@ services:
       - "3000:3000"
     restart: always
     volumes:
-      - /docker-mount/node8/app:/usr/src/app
+      - /docker/dd/node8/app:/usr/src/app
     command: node index.js
     depends_on:
       - mariadb
@@ -40,20 +40,20 @@ services:
     volumes_from:
       - www
     volumes:
-      - /docker-mount/php/php.ini:/usr/local/etc/php/php.ini
+      - /docker/dd/php/php.ini:/usr/local/etc/php/php.ini
     restart: always
     depends_on:
       - mariadb
     networks:
       - web_server_network
 
-  nico_ll:
-    image: dev_ops/php_laravel:1
-    container_name: nico_ll
-    volumes_from:
-      - www
-    volumes:
-      - /docker-mount/php/php.ini:/usr/local/etc/php/php.ini
+ # nico_ll:
+ #   image: dev_ops/php_laravel:1
+ #   container_name: nico_ll
+ #   volumes_from:
+ #     - www
+ #   volumes:
+ #     - /docker/dd/php/php.ini:/usr/local/etc/php/php.ini
   
       
   mariadb:
@@ -62,7 +62,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /docker-mount/mariadb/data/mysql:/var/lib/mysql
+      - /docker/dd/mariadb/data/mysql:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=mysql
       - MYSQL_ROOT_PASSWORD=123456
@@ -75,7 +75,7 @@ services:
     container_name: www
     restart: always
     volumes:
-      - /docker-mount/www:/usr/share/nginx/html
+      - /docker/dd/www:/usr/share/nginx/html
 
 networks:
   web_server_network:
