@@ -1,0 +1,71 @@
+version: '2.1'
+services:
+  nginx:
+    image: git888.phoenix-5.com:1717/gino/docker/nginx
+    container_name: devops_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /docker-mount/www:/usr/share/nginx/html
+      - /docker-mount/nginx/logs:/var/log/nginx
+      - /docker-mount/nginx/conf:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+      - node
+    restart: always
+    networks:
+      - web_server_network
+
+  node:
+    image: git888.phoenix-5.com:1717/gino/docker/node
+    container_name: devops_node
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - /docker-mount/node8/app:/usr/src/app
+    command: node index.js
+    depends_on:
+      - mariadb
+    networks:
+      - web_server_network
+
+  php-fpm: 
+    image: git888.phoenix-5.com:1717/gino/docker/php-fpm
+    container_name: devops_php_laravel
+    ports:
+      - "9000:9000"
+    volumes:
+      - /docker-mount/php/logs:/var/log/php
+      - /docker-mount/www:/usr/share/nginx/html
+      - /docker-mount/php/php.ini:/usr/local/etc/php/php.ini
+      - /docker-mount/www:/var/www
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - web_server_network
+
+  mariadb:
+    image: git888.phoenix-5.com:1717/gino/docker/mariadb
+    container_name: devops_db_mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - /docker-mount/mariadb/data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=mysql
+      - MYSQL_ROOT_PASSWORD=123456
+    restart: always
+    networks:
+      - web_server_network
+
+networks:
+  web_server_network:
+    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#      - subnet: "${WEB_SERVER_SUBNET}"
+#        gateway: "${WEB_SERVER_GATEWAY}"

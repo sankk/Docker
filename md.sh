@@ -1,9 +1,16 @@
-mkdir -p /docker/dd/mariadb/data/mysql
-mkdir -p /dockeri/dd/www
-mkdir -p /docker/dd/node8/app
-mkdir -p /docker/dd/nginx/logs && mkdir -p /docker/dd/nginx/conf && mdkir -p /docker/dd/nginx/conf/cert
-mkdir -p /docker/dd/php
-cp ./php/php.ini /docker/dd/php
-cp ./nginx/nginx.conf /docker/dd/nginx/
-cp ./nginx/cert/* /docker/dd/nginx/conf/cert
-cp ./nginx/conf.d/* /docker/dd/nginx/conf/
+mkdir -p /docker-mount/mariadb/data/mysql
+mkdir -p /docker-mount/mariadb/docker-entrypoint-initdb.d
+mkdir -p /docker-mount/www
+mkdir -p /docker-mount/redis/data
+mkdir -p /docker-mount/node8/app
+mkdir -p /docker-mount/nginx/logs && mkdir -p /docker-mount/nginx/conf && mkdir -p /docker-mount/nginx/conf/cert
+mkdir -p /docker-mount/php && mkdir -p /docker-mount/php/logs
+mkdir -p /docker-mount/cron && touch /docker-mount/cron/cron.log
+groupadd -g 33 www-data && useradd -s /sbin/nologin -d /home/www-data www-data -g www-data
+cp ./php/php.ini /docker-mount/php
+cp ./nginx/nginx.conf /docker-mount/nginx/
+cp ./nginx/cert/* /docker-mount/nginx/conf/cert/
+cp ./nginx/conf.d/* /docker-mount/nginx/conf/
+cp ./node8/app/* /docker-mount/node8/app/
+cp 0schema.sql /docker-mount/mariadb/docker-entrypoint-initdb.d/
+chown -R www-data:www-data /docker-mount/www

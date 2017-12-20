@@ -1,0 +1,70 @@
+version: '2.1'
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx-ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /docker-mount/www:/usr/share/nginx/html
+      - /docker-mount/nginx/logs:/var/log/nginx
+      - /docker-mount/nginx/conf:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+      - node
+    restart: always
+    networks:
+      - web_server_network
+  node:
+    build: ./node8
+    container_name: node8
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - /docker-mount/node8/app:/usr/src/app
+    command: node index.js
+    depends_on:
+      - mariadb
+    networks:
+      - web_server_network
+
+  php-fpm: 
+    build: ./php
+    container_name: php-fpm
+    ports:
+      - "9000:9000"
+    volumes:
+      - /docker-mount/www:/usr/share/nginx/html
+      - /docker-mount/php/logs:/var/log/php
+      - /docker-mount/php/php.ini:/usr/local/etc/php/php.ini
+    restart: always
+    depends_on:
+      - mariadb
+    networks:
+      - web_server_network
+
+  mariadb:
+    image: mariadb:10.3
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - /docker-mount/mariadb/data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=mysql
+      - MYSQL_ROOT_PASSWORD=123456
+    restart: always
+    networks:
+      - web_server_network
+
+networks:
+  web_server_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: "${WEB_SERVER_SUBNET}"
+        gateway: "${WEB_SERVER_GATEWAY}"
+

@@ -1,31 +1,30 @@
 version: '2.1'
 services:
   nginx:
-    build: ./nginx
-    container_name: nginx-ssl
+    image: git888.phoenix-5.com:1717/gino/docker/devops_nginx:v0.0.1
+    container_name: devops_nginx
     ports:
       - "80:80"
       - "443:443"
-    volumes_from:
-      - www
     volumes:
-      - /docker/dd/nginx/logs:/var/log/nginx
-      - /docker/dd/nginx/conf:/etc/nginx/conf.d
-      - /docker/dd/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /docker-mount/www:/usr/share/nginx/html
+      - /docker-mount/nginx/logs:/var/log/nginx
+      - /docker-mount/nginx/conf:/etc/nginx/conf.d
     depends_on:
       - php-fpm
       - node
     restart: always
     networks:
-        - web_server_network
+      - web_server_network
+
   node:
-    build: ./node8
-    container_name: node8
+    image: git888.phoenix-5.com:1717/gino/docker/devops_node:v0.0.1
+    container_name: devops_node
     ports:
       - "3000:3000"
     restart: always
     volumes:
-      - /docker/dd/node8/app:/usr/src/app
+      - /docker-mount/node8/app:/usr/src/app
     command: node index.js
     depends_on:
       - mariadb
@@ -33,56 +32,99 @@ services:
       - web_server_network
 
   php-fpm: 
-    build: ./php
-    container_name: php-fpm
+    image: git888.phoenix-5.com:1717/gino/docker/devops_php_laravel:v0.0.2
+    container_name: devops_php_laravel
     ports:
       - "9000:9000"
-    volumes_from:
-      - www
     volumes:
-      - /docker/dd/php/php.ini:/usr/local/etc/php/php.ini
+      - /docker-mount/php/logs:/var/log/php
+      - /docker-mount/php/php.ini:/usr/local/etc/php/php.ini
+      - /docker-mount/www:/var/www/html
     restart: always
+    #extra_hosts:
+    #  - "client.fas.test:192.168.0.117"
+    #  - "a.test:192.168.0.108"
+    #  - "jay.client.fas.test:192.168.0.117"
     depends_on:
       - mariadb
+      - mongo
     networks:
       - web_server_network
 
- # nico_ll:
- #   image: dev_ops/php_laravel:1
- #   container_name: nico_ll
- #   volumes_from:
- #     - www
- #   volumes:
- #     - /docker/dd/php/php.ini:/usr/local/etc/php/php.ini
-  
-      
+  php-jobs:
+    image: git888.phoenix-5.com:1717/gino/docker/devops_jobs_php_laravel:v0.0.2
+    container_name: devops_jobs_php_laravel
+    volumes:
+      - /docker-mount/www:/var/www/html
+      - /docker-mount/php/logs:/var/log/php
+    #command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    depends_on: 
+      - nginx
+    #command: /usr/bin/supervisord
+    restart: always
+    networks:
+      - web_server_network
+
+  php-cron:
+    image: git888.phoenix-5.com:1717/gino/docker/devops_cron_php_laravel:v0.0.2
+    container_name: devops_cron_php_laravel
+    volumes:
+      - /docker-mount/www:/var/www/html
+      - /docker-mount/php/logs:/var/log/php
+      - /docker-mount/cron/cron.log:/var/log/cron.log
+    #command: /etc/init.d/cron start
+    restart: always
+    networks:
+      - web_server_network
+
+  mongo:
+    image: git888.phoenix-5.com:1717/gino/docker/devops_mongo:v0.0.1
+    container_name: devops_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - /docker-mount/mongo/data:/data/db
+    environment:
+      - MONGODB_ADMIN_USER=fas_admin
+      - MONGODB_ADMIN_PASS=password
+      #- MONGODB_APPLICATION_DATABASE=fas
+      #- MONGODB_APPLICATION_USER=fas_admin
+      #- MONGODB_APPLICATION_PASS=password
+    restart: always
+    networks:
+      - web_server_network
+
+  redis:
+    image: git888.phoenix-5.com:1717/gino/docker/devops_redis:v0.0.1
+    container_name: devops_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - /docker-mount/redis/data:/data
+    restart: always
+    networks:
+      - web_server_network
+
   mariadb:
-    image: cytopia/mariadb-10.3
-    container_name: mariadb
+    image: git888.phoenix-5.com:1717/gino/docker/devops_db_mariadb:v0.0.1
+    container_name: devops_db_mariadb
     ports:
       - "3306:3306"
     volumes:
-      - /docker/dd/mariadb/data/mysql:/var/lib/mysql
+      - /docker-mount/mariadb/data/mysql:/var/lib/mysql
+      - /docker-mount/mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_DATABASE=mysql
       - MYSQL_ROOT_PASSWORD=123456
     restart: always
     networks:
       - web_server_network
-  
-  www:
-    image: tianon/true
-    container_name: www
-    restart: always
-    volumes:
-      - /docker/dd/www:/usr/share/nginx/html
 
 networks:
   web_server_network:
     driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: "${WEB_SERVER_SUBNET}"
-        gateway: "${WEB_SERVER_GATEWAY}"
-
+#    ipam:
+#      driver: default
+#      config:
+#      - subnet: "${WEB_SERVER_SUBNET}"
+#        gateway: "${WEB_SERVER_GATEWAY}"
