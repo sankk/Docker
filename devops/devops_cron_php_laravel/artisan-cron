@@ -1,0 +1,1 @@
+* * * * *   /usr/local/bin/lla . schedule:run  >>/var/log/cron.log 2>&1

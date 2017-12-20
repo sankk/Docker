@@ -1,0 +1,17 @@
+#!/bin/sh
+root=/var/www/html
+
+if [ "$#" -le 0 ]; then
+  echo "必須指定專案目錄"
+  exit
+fi
+
+if [ -e "$root/$1" ]; then
+  projectPath="$root/$1"
+  shift
+else 
+  echo "第一個參數必須是專案目錄"
+  exit
+fi
+cd $projectPath
+/usr/local/bin/php artisan --ansi "$@"
