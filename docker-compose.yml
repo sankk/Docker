@@ -32,7 +32,7 @@ services:
       - web_server_network
 
   php-fpm: 
-    image: git888.phoenix-5.com:1717/gino/docker/devops_php_laravel:v0.0.2
+    image: git888.phoenix-5.com:1717/gino/docker/devops_php_laravel:v0.0.5
     container_name: devops_php_laravel
     ports:
       - "9000:9000"
@@ -52,7 +52,7 @@ services:
       - web_server_network
 
   php-jobs:
-    image: git888.phoenix-5.com:1717/gino/docker/devops_jobs_php_laravel:v0.0.2
+    image: git888.phoenix-5.com:1717/gino/docker/devops_jobs_php_laravel:v0.0.3
     container_name: devops_jobs_php_laravel
     volumes:
       - /docker-mount/www:/var/www/html
@@ -66,7 +66,7 @@ services:
       - web_server_network
 
   php-cron:
-    image: git888.phoenix-5.com:1717/gino/docker/devops_cron_php_laravel:v0.0.2
+    image: git888.phoenix-5.com:1717/gino/docker/devops_cron_php_laravel:v0.0.3
     container_name: devops_cron_php_laravel
     volumes:
       - /docker-mount/www:/var/www/html
