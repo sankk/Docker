@@ -5,6 +5,7 @@ sh md.sh && docker-compose build && docker-compose up -d
 devops_redis:v0.0.1		redis V4.02
 devops_node:v0.0.1		node V8.4.0
 devops_nginx:v0.0.1		nginx v1.12.1
+devops_nginx:v0.0.2             nginx v1.13.5
 devops_db_mariadb:v0.0.1	mariadb v10.3.1
 devops_mongo:v0.0.1		mongodb v3.4.10
 =========================

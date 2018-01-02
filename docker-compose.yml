@@ -1,13 +1,13 @@
 version: '2.1'
 services:
   nginx:
-    image: git888.phoenix-5.com:1717/gino/docker/devops_nginx:v0.0.1
+    image: git888.phoenix-5.com:1717/gino/docker/devops_nginx:v0.0.2
     container_name: devops_nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /docker-mount/www:/usr/share/nginx/html
+      - /docker-mount/www:/var/www/html
       - /docker-mount/nginx/logs:/var/log/nginx
       - /docker-mount/nginx/conf:/etc/nginx/conf.d
     depends_on:
