@@ -1,0 +1,12 @@
+FROM git888.phoenix-5.com:1717/gino/docker/devops_cron_php_laravel:v0.0.3
+RUN echo deb http://ftp.de.debian.org/debian jessie main > /etc/apt/sources.list.d/jessie.list
+RUN apt-get update
+RUN apt-get remove -y libcurl3-gnutls
+RUN apt-cache policy libcurl3-gnutls
+RUN apt-get install -y libcurl3-gnutls=7.38.0-4+deb8u8
+RUN apt-mark hold libcurl3-gnutls
+RUN apt-get install -y git
+WORKDIR /var/www/html
+RUN crontab /etc/cron.d/artisan-cron
+ENTRYPOINT ["docker-php-entrypoint"]
+CMD ["php-fpm","-R"]
