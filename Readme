@@ -15,13 +15,16 @@ devops_php_laravel:v0.0.3	add phpdoc and xsl
 devops_php_laravel:v0.0.4	add freetype and gd
 devops_php_laravel:v0.0.5	add phpredis and igbinary
 devops_php_laravel:v0.0.6	fix-libcurl3-gnutls V7.38.0-4
+devops_php_laravel:v0.0.7	add zmq mssql
 ==============================
 devops_cron_php_laravel:v0.0.1	phpfpm v7.1.8 + cron
 devops_cron_php_laravel:v0.0.2	add docker-php-ext-mongodb.ini
 devops_cron_php_laravel:v0.0.3	add phpredis and igbinary
 devops_cron_php_laravel:v0.0.4	fix-libcurl3-gnutls V7.38.0-4
+devops_cron_php_laravel:v0.0.5	add zmq mssql
 ==============================
 devops_jobs_php_laravel:v0.0.1	phpfpm v7.1.8 + jobs
 devops_jobs_php_laravel:v0.0.2	add docker-php-ext-mongodb.ini
 devops_jobs_php_laravel:v0.0.3	add phpredis and igbinary
-devops_jobs_php_laravel:v0.0.3	fix-libcurl3-gnutls V7.38.0-4
+devops_jobs_php_laravel:v0.0.4	fix-libcurl3-gnutls V7.38.0-4
+devops_jobs_php_laravel:v0.0.5	add zmq mssql
