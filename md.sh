@@ -6,6 +6,7 @@ mkdir -p /docker-mount/node8/app
 mkdir -p /docker-mount/nginx/logs && mkdir -p /docker-mount/nginx/conf && mkdir -p /docker-mount/nginx/conf/cert
 mkdir -p /docker-mount/php && mkdir -p /docker-mount/php/logs
 mkdir -p /docker-mount/cron && touch /docker-mount/cron/cron.log
+mkdir -p /docker-mount/jobs/conf.d && mkdir -p /docker-mount/jobs/logs
 #groupadd -g 33 www-data && useradd -s /sbin/nologin -d /home/www-data www-data -g www-data
 cp ./php/php.ini /docker-mount/php
 cp ./devops/nginx/nginx.conf /docker-mount/nginx/

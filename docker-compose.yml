@@ -57,6 +57,8 @@ services:
     volumes:
       - /docker-mount/www:/var/www/html
       - /docker-mount/php/logs:/var/log/php
+      - /docker-mount/jobs/conf.d:/etc/supervisor/conf.d
+      - /docker-mount/jobs/logs:/var/log/supervisor
     #command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
     depends_on: 
       - nginx
