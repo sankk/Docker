@@ -1,5 +1,6 @@
 #!/bin/sh
-/usr/bin/supervisord
+#/usr/bin/supervisord
+/usr/bin/supervisord -n -c /etc/supervisord.conf -d /var/www/html
 set -e
 
 exec "$@"

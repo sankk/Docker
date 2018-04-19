@@ -59,7 +59,7 @@ services:
       - /docker-mount/php/logs:/var/log/php
       - /docker-mount/jobs/conf.d:/etc/supervisor/conf.d
       - /docker-mount/jobs/logs:/var/log/supervisor
-    #command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    #command: /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf -d /var/www/html
     depends_on: 
       - nginx
     #command: /usr/bin/supervisord

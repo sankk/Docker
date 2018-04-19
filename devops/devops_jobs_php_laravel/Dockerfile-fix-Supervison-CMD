@@ -1,0 +1,6 @@
+FROM git888.phoenix-5.com:1717/gino/docker/devops_jobs_php_laravel:v0.0.5
+ADD ./bin/* /usr/local/bin/
+RUN cd /usr/local/bin/ && chmod +x *
+WORKDIR /var/www/html
+ENTRYPOINT ["docker-php-entrypoint"]
+CMD ["php-fpm","-R"]
