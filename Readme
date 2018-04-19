@@ -1,5 +1,5 @@
 Run this command 
-sh md.sh && docker-compose build && docker-compose up -d
+sh md.sh && docker-compose up -d
 
 =========================
 devops_redis:v0.0.1		redis V4.02
